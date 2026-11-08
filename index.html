@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shiraaz Haidar</title>
+  <meta name="description" content="Shiraaz Haidar — CS + Applied Math at the University of Michigan. Simulations, state estimation and cloud systems, dealt out as a hand of poker.">
+  <meta property="og:title" content="Shiraaz Haidar">
+  <meta property="og:description" content="CS + Applied Math @ University of Michigan. I build simulations and systems that make decisions under uncertainty.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#07130e">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script type="module" src="main.js"></script>
+</head>
+<body>
+  <div class="spotlight" aria-hidden="true"></div>
+
+  <nav class="nav" aria-label="Main">
+    <a class="nav-brand" href="#preflop"><span class="nav-mark" aria-hidden="true">S<span class="suit-black">♠</span>H<span class="suit-red">♥</span></span><span class="nav-name">Shiraaz Haidar</span></a>
+    <ul class="nav-links">
+      <li><a href="#flop">Projects</a></li>
+      <li><a href="#river">Experience</a></li>
+      <li><a href="assets/resume.pdf" target="_blank" rel="noopener">Résumé</a></li>
+      <li><a href="#showdown">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section id="preflop" class="street street-hero" aria-labelledby="hero-name">
+      <div class="betting-line" aria-hidden="true"></div>
+      <div class="hero-cards" data-slot="hole-cards"></div>
+      <div class="hero-copy">
+        <p class="street-label">Preflop</p>
+        <h1 id="hero-name" data-slot="name"></h1>
+        <p class="hero-tagline" data-slot="tagline"></p>
+        <p class="hero-pitch" data-slot="pitch"></p>
+        <div class="hero-actions">
+          <a class="btn btn-brass" data-slot="resume-link" target="_blank" rel="noopener">Résumé</a>
+          <a class="btn btn-ghost" href="#flop">See the flop ↓</a>
+        </div>
+        <dl class="hero-stats" data-slot="stats"></dl>
+      </div>
+      <button id="dealer-btn" class="dealer-btn" type="button" aria-label="Open the poker equity calculator" title="Run the numbers">D</button>
+    </section>
+
+    <section id="flop" class="street" aria-labelledby="flop-title">
+      <header class="street-head">
+        <p class="street-label">The Flop</p>
+        <h2 id="flop-title">Projects</h2>
+        <div class="board" data-dealt="3" aria-hidden="true"></div>
+      </header>
+      <div class="flop-grid" data-slot="flop"></div>
+    </section>
+
+    <section id="turn" class="street" aria-labelledby="turn-title">
+      <header class="street-head">
+        <p class="street-label">The Turn</p>
+        <h2 id="turn-title">Side action</h2>
+        <div class="board" data-dealt="4" aria-hidden="true"></div>
+      </header>
+      <div class="turn-grid" data-slot="turn"></div>
+    </section>
+
+    <section id="river" class="street" aria-labelledby="river-title">
+      <header class="street-head">
+        <p class="street-label">The River</p>
+        <h2 id="river-title">Experience &amp; skills</h2>
+        <div class="board" data-dealt="5" aria-hidden="true"></div>
+      </header>
+      <div class="river-layout">
+        <ol class="experience" data-slot="experience"></ol>
+        <aside class="river-side">
+          <h3 class="side-title">Chip stacks</h3>
+          <div class="skills" data-slot="skills"></div>
+          <h3 class="side-title">Honors</h3>
+          <ul class="honors" data-slot="honors"></ul>
+          <p class="education" data-slot="education"></p>
+        </aside>
+      </div>
+    </section>
+
+    <section id="showdown" class="street street-showdown" aria-labelledby="showdown-title">
+      <header class="street-head">
+        <p class="street-label">Showdown</p>
+        <h2 id="showdown-title">All in.</h2>
+        <p class="showdown-sub">If you like how I play the hand, let’s talk.</p>
+      </header>
+      <div id="pot" class="pot" aria-hidden="true"></div>
+      <ul class="contact" data-slot="contact"></ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <button id="equity-chip" class="equity-chip" type="button"><span aria-hidden="true">♠</span> Run the numbers</button>
+    <p>Hand-built with HTML, CSS and vanilla JavaScript. The equity calculator’s evaluator is written from scratch.</p>
+  </footer>
+
+  <noscript>
+    <div class="noscript">
+      <p>Shiraaz Haidar — CS + Applied Math @ University of Michigan.</p>
+      <p><a href="assets/resume.pdf">Résumé (PDF)</a> · <a href="https://github.com/ShiraazHaidar">GitHub</a> · <a href="mailto:shiraazh@umich.edu">shiraazh@umich.edu</a></p>
+    </div>
+  </noscript>
+</body>
+</html>
