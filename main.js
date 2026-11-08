@@ -1,5 +1,6 @@
 import content from './content.js';
 import { initAnimations } from './animations.js';
+import { initCalculator } from './calculator.js';
 
 const RED_SUITS = new Set(['♥', '♦']);
 
@@ -151,6 +152,7 @@ export function renderAll(c) {
 
 function start() {
   renderAll(content);
+  initCalculator();
   initAnimations();
 }
 
