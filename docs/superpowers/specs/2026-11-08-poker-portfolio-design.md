@@ -73,6 +73,6 @@ Blog, CMS, analytics, a 3D/WebGL scene, a playable hand vs the visitor, and a cu
 
 ## Open items
 
-- LinkedIn URL (placeholder in `content.js` until provided).
-- Sanitized résumé PDF (placeholder link until provided).
+- ~~LinkedIn URL~~: provided, https://www.linkedin.com/in/shiraazhaidar/
+- ~~Sanitized résumé PDF~~: provided, saved as `assets/resume.pdf`
 - Netlify account: Shiraaz creates it and connects the repo. Claude prepares everything else.
