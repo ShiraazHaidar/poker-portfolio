@@ -1,4 +1,5 @@
 import content from './content.js';
+import { initAnimations } from './animations.js';
 
 const RED_SUITS = new Set(['♥', '♦']);
 
@@ -150,6 +151,7 @@ export function renderAll(c) {
 
 function start() {
   renderAll(content);
+  initAnimations();
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
