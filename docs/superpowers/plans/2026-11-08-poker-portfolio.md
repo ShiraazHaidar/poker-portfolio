@@ -225,7 +225,7 @@ It builds the cards and lists from `content` using `document.createElement` and 
 - [ ] **Step 5: Verify in the browser**
 
 - Serve with `npx --yes http-server -p 8080 -c-1 .`, using a `.claude/launch.json` entry, and open it in the preview.
-- Check that all five sections render with the correct content, and that `get_page_text` contains no phone digits `734`.
+- Check that all five sections render with the correct content, and that `get_page_text` contains no phone number.
 - At 375px wide: `document.documentElement.scrollWidth <= innerWidth`, and the flop is stacked.
 - The console has no errors.
 

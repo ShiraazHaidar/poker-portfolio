@@ -45,7 +45,7 @@ A slim fixed nav bar shows the name and links: Projects · Experience · Résum�
 - **Engine:**
   - A hand evaluator written from scratch (7-card best-of-5, ranking all hand categories with kickers).
   - Monte Carlo simulation (default 100k trials) in a Web Worker, posting progress every ~5k trials so the win/tie bars update live.
-  - Exact enumeration when 4 or 5 board cards are known.
+  - Exact enumeration when 3, 4 or 5 board cards are known (at most 1,081 runouts). Changed during the build: enumerating the flop is instant and exact.
 - **Output:** Win % and tie % per player, trials per second, and a ±95% confidence interval. Includes a "How it works" note and a link to the source on GitHub.
 - **Tests:** A plain-JS test file run with `node`, covering:
   - hand-category ranking and kicker ties;

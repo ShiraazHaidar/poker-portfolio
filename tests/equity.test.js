@@ -75,3 +75,22 @@ test('progress callback fires', () => {
   });
   assert.ok(calls >= 3, `expected >=3 progress calls, got ${calls}`);
 });
+
+test('exact flop enumerates every turn and river', () => {
+  const r = equity({ hands: [h('As Ah'), h('Ks Kh')], board: h('2c 7d 9h') });
+  assert.equal(r.exact, true);
+  assert.equal(r.trials, 990); // C(45, 2)
+  assert.deepEqual(r.ci95, [0, 0]);
+  near(r.win[0] + r.tie[0] + r.win[1] + r.tie[1], 1, 1e-9, 'equities sum to 1');
+});
+
+test('four players with a three-way split', () => {
+  // Board AA KK 7: three players play AAKK with a queen kicker; the 8 kicker loses.
+  const r = equity({
+    hands: [h('Qh 3c'), h('Qd 4c'), h('Qc 5h'), h('8h 3d')],
+    board: h('As Ad Ks Kd 7c'),
+  });
+  assert.deepEqual(r.win, [0, 0, 0, 0]);
+  r.tie.slice(0, 3).forEach((t) => near(t, 1 / 3, 1e-12, 'three-way share'));
+  assert.equal(r.tie[3], 0);
+});

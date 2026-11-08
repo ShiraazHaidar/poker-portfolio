@@ -2,7 +2,7 @@
 
 A one-page personal site that plays out a hand of poker: **Preflop** (intro), **the Flop** (projects), **the Turn** (side projects), **the River** (experience and skills) and **Showdown** (contact). It is plain HTML, CSS and JavaScript with no build step. GSAP adds scroll animations, and everything stays readable without it.
 
-Hidden extra: press **E**, or click the dealer button **D**, to open a poker equity calculator. Its hand evaluator is written from scratch, and it runs Monte Carlo simulation in a Web Worker, or exact enumeration once four or more board cards are known.
+Hidden extra: press **E**, or click the dealer button **D**, to open a poker equity calculator. Its hand evaluator is written from scratch. Preflop it runs a Monte Carlo simulation in a Web Worker; once the flop is known it enumerates every remaining runout for an exact answer.
 
 ## Editing content
 

@@ -94,6 +94,7 @@ function slotButton(a, label) {
     class: `eq-slot${card != null ? ' is-filled' : ''}${active ? ' is-active' : ''}${card != null && isRed(card) ? ' is-red' : ''}`,
     'aria-label': card != null ? `${label}: ${cardLabel(card)}. Click to clear.` : `${label}: empty. Click to choose.`,
     'aria-pressed': active ? 'true' : 'false',
+    'data-focus-key': a.kind === 'seat' ? `seat-${a.i}-${a.j}` : `board-${a.j}`,
   }, card != null ? cardFace(card) : '+');
   btn.addEventListener('click', () => {
     if (card != null) setSlot(a, null);
@@ -138,6 +139,7 @@ function renderGrid() {
         type: 'button',
         class: `eq-card${isRed(card) ? ' is-red' : ''}`,
         disabled: taken || !state.active,
+        'data-focus-key': `card-${card}`,
         'aria-label': `${cardLabel(card)}${taken ? ' (in use)' : ''}`,
       }, cardFace(card));
       btn.addEventListener('click', () => {
@@ -158,7 +160,8 @@ function renderGrid() {
 function renderControls() {
   const error = validate(currentInput());
   const run = dialog.querySelector('[data-eq="run"]');
-  run.disabled = Boolean(error) || state.running;
+  run.disabled = Boolean(error);
+  run.setAttribute('aria-disabled', String(Boolean(error) || state.running));
   run.textContent = state.running ? 'Running…' : 'Run the numbers';
   dialog.querySelector('[data-eq="hint"]').textContent = error ?? '';
   dialog.querySelector('[data-eq="add"]').disabled = state.seats.length >= 4;
@@ -175,11 +178,30 @@ function renderControls() {
   }
 }
 
+// Re-rendering replaces buttons, so put keyboard focus back on the equivalent element.
+function withFocus(fn) {
+  const focused = document.activeElement;
+  const key = dialog.contains(focused) ? focused?.dataset?.focusKey : null;
+  fn();
+  if (!key) return;
+  let target = dialog.querySelector(`[data-focus-key="${key}"]`);
+  if (target?.disabled && key.startsWith('card-')) {
+    // The card just picked is now in use: move to the next card still available.
+    const cards = [...dialog.querySelectorAll('.eq-card')];
+    const at = cards.indexOf(target);
+    target = [...cards.slice(at + 1), ...cards.slice(0, at)].find((b) => !b.disabled)
+      ?? dialog.querySelector('[data-eq="run"]');
+  }
+  if (target && !target.disabled) target.focus({ preventScroll: true });
+}
+
 function render() {
-  renderSeats();
-  renderBoard();
-  renderGrid();
-  renderControls();
+  withFocus(() => {
+    renderSeats();
+    renderBoard();
+    renderGrid();
+    renderControls();
+  });
 }
 
 // ---------- Worker ----------
@@ -192,7 +214,7 @@ function stopWorker() {
 
 function run() {
   const input = currentInput();
-  if (validate(input)) return;
+  if (state.running || validate(input)) return;
   stopWorker();
   state.running = true;
   state.result = null;
@@ -208,8 +230,7 @@ function run() {
     }
     state.result = msg.result;
     if (msg.type === 'done') stopWorker();
-    renderSeats();
-    renderControls();
+    withFocus(() => { renderSeats(); renderControls(); });
   };
   worker.onerror = () => {
     stopWorker();
@@ -217,8 +238,7 @@ function run() {
     dialog.querySelector('[data-eq="hint"]').textContent = 'The simulation could not start in this browser.';
   };
   worker.postMessage({ ...input, trials: TRIALS });
-  renderSeats();
-  renderControls();
+  withFocus(() => { renderSeats(); renderControls(); });
 }
 
 // ---------- Dialog ----------
@@ -229,18 +249,18 @@ function buildDialog() {
       el('div', {},
         el('p', { class: 'street-label' }, 'Hidden extra'),
         el('h2', { id: 'equity-title' }, 'Run the numbers')),
-      el('button', { type: 'button', class: 'eq-close', 'aria-label': 'Close calculator', 'data-eq': 'close' }, '×')),
+      el('button', { type: 'button', class: 'eq-close', 'aria-label': 'Close calculator', 'data-eq': 'close', 'data-focus-key': 'close' }, '×')),
     el('p', { class: 'eq-intro' },
-      'Pick hole cards for 2–4 players and an optional board. A Web Worker simulates the runouts and the odds update live.'),
+      'Pick hole cards for 2–4 players and an optional board. Odds are computed in a Web Worker and update live.'),
     el('div', { class: 'eq-seats', 'data-eq': 'seats' }),
     el('div', { class: 'eq-board-row' },
       el('p', { class: 'eq-seat-name' }, 'Board'),
       el('div', { class: 'eq-slots eq-board', 'data-eq': 'board' })),
     el('div', { class: 'eq-controls' },
-      el('button', { type: 'button', class: 'btn btn-brass', 'data-eq': 'run' }, 'Run the numbers'),
-      el('button', { type: 'button', class: 'btn btn-ghost', 'data-eq': 'add' }, '+ Player'),
-      el('button', { type: 'button', class: 'btn btn-ghost', 'data-eq': 'remove' }, '− Player'),
-      el('button', { type: 'button', class: 'btn btn-ghost', 'data-eq': 'clear' }, 'Clear')),
+      el('button', { type: 'button', class: 'btn btn-brass', 'data-eq': 'run', 'data-focus-key': 'run' }, 'Run the numbers'),
+      el('button', { type: 'button', class: 'btn btn-ghost', 'data-eq': 'add', 'data-focus-key': 'add' }, '+ Player'),
+      el('button', { type: 'button', class: 'btn btn-ghost', 'data-eq': 'remove', 'data-focus-key': 'remove' }, '− Player'),
+      el('button', { type: 'button', class: 'btn btn-ghost', 'data-eq': 'clear', 'data-focus-key': 'clear' }, 'Clear')),
     el('p', { class: 'eq-hint', role: 'status', 'data-eq': 'hint' }),
     el('p', { class: 'eq-meta', 'aria-live': 'polite', 'data-eq': 'meta' }),
     el('p', { class: 'eq-grid-hint', 'data-eq': 'grid-hint' }),
@@ -249,9 +269,14 @@ function buildDialog() {
       el('summary', {}, 'How it works'),
       el('p', {},
         'Each hand is scored by a 7-card evaluator written from scratch: it checks all 21 five-card combinations and ranks them by category, then kickers. ',
-        'With fewer than four board cards known, a Web Worker deals 100,000 random runouts (Monte Carlo) and reports each player’s share of wins and split pots, with a 95% confidence interval. ',
-        'With four or five board cards known, it enumerates every possible runout for an exact answer.'),
+        'Preflop, a Web Worker deals 100,000 random runouts (Monte Carlo) and reports each player’s share of wins and split pots, with a 95% confidence interval. ',
+        'Once the flop is known there are at most 1,081 runouts left, so it enumerates every one for an exact answer.'),
       el('a', { href: SOURCE_URL, target: '_blank', rel: 'noopener' }, 'Read the evaluator source on GitHub →')));
+
+  // All content sits in one full-size wrapper, so only a true backdrop click targets the <dialog>.
+  const body = el('div', { class: 'eq-body' });
+  body.append(...dialog.childNodes);
+  dialog.append(body);
 
   dialog.querySelector('[data-eq="close"]').addEventListener('click', () => dialog.close());
   dialog.querySelector('[data-eq="run"]').addEventListener('click', run);

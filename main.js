@@ -150,10 +150,29 @@ export function renderAll(c) {
   renderBoards();
 }
 
+const GSAP_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5';
+const LATE_MS = 1200; // after this, skip the hero intro so visible content isn't hidden again
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.crossOrigin = 'anonymous';
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.append(s);
+  });
+}
+
 function start() {
+  // Content renders first and never waits on the CDN.
   renderAll(content);
   initCalculator();
-  initAnimations();
+  const t0 = performance.now();
+  loadScript(`${GSAP_CDN}/gsap.min.js`)
+    .then(() => loadScript(`${GSAP_CDN}/ScrollTrigger.min.js`))
+    .then(() => initAnimations({ intro: performance.now() - t0 < LATE_MS }))
+    .catch(() => { /* CDN unavailable: the page is already fully visible */ });
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);

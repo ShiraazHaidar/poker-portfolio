@@ -144,7 +144,7 @@ export default {
   honors: [
     'Michigan 1st Place, Gold Tier — CyberPatriots',
     'QuestBridge Finalist',
-    'Summa Cum Laude',
+    'Summa Cum Laude (high school)',
   ],
 
   skills: [
