@@ -26,4 +26,4 @@ These run the evaluator and equity-engine tests with Node's built-in test runner
 
 ## Deploy
 
-Hosted on Netlify from this repository. There is no build command, and the publish directory is the repository root (see `netlify.toml`).
+Live at https://shiraazhaidar.com, hosted on Cloudflare Pages from this repository. There is no build command; the output directory is the repository root. Response headers are set in `_headers`.
