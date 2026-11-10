@@ -26,4 +26,6 @@ These run the evaluator and equity-engine tests with Node's built-in test runner
 
 ## Deploy
 
-Live at https://shiraazhaidar.com, hosted on Cloudflare Pages from this repository. There is no build command; the output directory is the repository root. Response headers are set in `_headers`.
+Live at https://shiraazhaidar.com, hosted on Cloudflare Pages from this repository. Cloudflare runs `bash build.sh` and publishes `dist/`, which contains only the site files (not `docs/` or `tests/`). Response headers are set in `_headers`.
+
+To close the site temporarily, add a file named `SITE_CLOSED` to the repository root. Visitors then see only the "Back soon" page in `back-soon/`. Delete the file to reopen the site.
