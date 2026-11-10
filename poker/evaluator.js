@@ -1,4 +1,4 @@
-// Hand evaluator written from scratch.
+// Hand evaluator with no poker-library dependencies.
 // Score = category * 16^5 + tiebreak ranks packed as base-16 digits (most significant first),
 // so a higher score is always a stronger hand and equal scores are exact ties.
 

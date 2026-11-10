@@ -268,7 +268,7 @@ function buildDialog() {
     el('details', { class: 'eq-how' },
       el('summary', {}, 'How it works'),
       el('p', {},
-        'Each hand is scored by a 7-card evaluator written from scratch: it checks all 21 five-card combinations and ranks them by category, then kickers. ',
+        'Each hand is scored by a 7-card evaluator that uses no poker libraries: it checks all 21 five-card combinations and ranks them by category, then kickers. ',
         'Preflop, a Web Worker deals 100,000 random runouts (Monte Carlo) and reports each player’s share of wins and split pots, with a 95% confidence interval. ',
         'Once the flop is known there are at most 1,081 runouts left, so it enumerates every one for an exact answer.'),
       el('a', { href: SOURCE_URL, target: '_blank', rel: 'noopener' }, 'Read the evaluator source on GitHub →')));
